@@ -1,6 +1,6 @@
 {
   "name": "codeceptjs",
-  "version": "3.3.5",
+  "version": "3.3.5-1",
   "description": "Supercharged End 2 End Testing Framework for NodeJS",
   "keywords": [
     "acceptance",
@@ -33,7 +33,7 @@
   "bin": {
     "codeceptjs": "./bin/codecept.js"
   },
-  "repository": "Codeception/codeceptjs",
+  "repository": "codeceptjs/CodeceptJS",
   "scripts": {
     "build": "tsc -p ./",
     "json-server": "./node_modules/json-server/bin/index.js test/data/rest/db.json -p 8010 --watch -m test/data/rest/headers.js",
@@ -55,8 +55,10 @@
   "dependencies": {
     "@codeceptjs/configure": "^0.8.0",
     "@codeceptjs/helper": "^1.0.2",
-    "acorn": "^7.4.1",
-    "allure-js-commons": "^1.3.2",
+    "@cucumber/gherkin": "^24.0.0",
+    "@cucumber/cucumber-expressions": "^16.0.0",
+    "acorn": "^8.8.0",
+    "allure-js-commons": "^2.0.0-beta.19",
     "arrify": "^2.0.1",
     "axios": "^0.21.4",
     "chai": "^4.3.6",
@@ -65,13 +67,11 @@
     "commander": "^2.20.3",
     "cross-spawn": "^7.0.3",
     "css-to-xpath": "^0.1.0",
-    "cucumber-expressions": "^6.6.2",
     "envinfo": "^7.8.1",
     "escape-string-regexp": "^1.0.3",
     "figures": "^3.2.0",
     "fn-args": "^4.0.0",
     "fs-extra": "^8.1.0",
-    "gherkin": "^5.1.0",
     "glob": "^6.0.1",
     "inquirer": "^6.5.2",
     "joi": "^17.6.0",
@@ -79,8 +79,8 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.merge": "^4.6.2",
     "mkdirp": "^1.0.4",
-    "mocha": "8.1.3",
-    "mocha-junit-reporter": "1.23.1",
+    "mocha": "^10.0.0",
+    "mocha-junit-reporter": "2.0.2",
     "ms": "^2.1.3",
     "parse-function": "^5.6.4",
     "promise-retry": "^1.1.1",
