@@ -1,5 +1,6 @@
 const { expect } = require('chai');
-const { Parser } = require('gherkin');
+const Gherkin = require('@cucumber/gherkin');
+const Messages = require('@cucumber/messages');
 const Config = require('../../lib/config');
 const {
   Given,
@@ -53,15 +54,18 @@ describe('BDD', () => {
   });
 
   it('should parse gherkin input', () => {
-    const parser = new Parser();
+    const uuidFn = Messages.IdGenerator.uuid();
+    const builder = new Gherkin.AstBuilder(uuidFn);
+    const matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInMarkdownTokenMatcher()
+
+    const parser = new Gherkin.Parser(builder, matcher);
     parser.stopAtFirstError = false;
     const ast = parser.parse(text);
-    // console.log('Feature', ast.feature);
-    // console.log('Scenario', ast.feature.children);
-    // console.log('Steps', ast.feature.children[0].steps[0]);
+    console.log('Feature', ast.feature);
+    console.log('Scenario', ast.feature.children);
     expect(ast.feature).is.ok;
     expect(ast.feature.children).is.ok;
-    expect(ast.feature.children[0].steps).is.ok;
+    expect(ast.feature.children[0].scenario.steps).is.ok;
   });
 
   it('should load step definitions', () => {
@@ -292,7 +296,7 @@ describe('BDD', () => {
     Feature: checkout process
 
     @super
-    Scenario Outline: order discount
+    Scenario: order discount
       Given I have product with price <price>$ in my cart
       And discount is 10 %
       Then I should see price is "<total>" $
