@@ -61,11 +61,45 @@ describe('BDD', () => {
     const parser = new Gherkin.Parser(builder, matcher);
     parser.stopAtFirstError = false;
     const ast = parser.parse(text);
-    console.log('Feature', ast.feature);
-    console.log('Scenario', ast.feature.children);
+    // console.log('Feature', ast.feature);
+    // console.log('Scenario', ast.feature.children);
     expect(ast.feature).is.ok;
     expect(ast.feature.children).is.ok;
     expect(ast.feature.children[0].scenario.steps).is.ok;
+  });
+
+  it('should support rule keyword', () => {
+    const text = `
+    @F01
+    Feature: Logs in
+
+      @R01
+      Rule: Email or password cannot be blank
+        @S01
+        Scenario:
+          When I input correct email
+          And I let password be empty
+          And I clicks submit button
+          Then I get an error message
+          And I am still on the login page
+        @S02
+        Scenario:
+          When I input correct password
+          And I let email be empty
+          And I clicks submit button
+          Then I get an error message
+          And I am still on the login page
+    `;
+    let sum = 0;
+    When('I input correct email', () => sum += 1);
+    When('I input correct password', () => sum += 2);
+    const suite = run(text);
+    expect(2).is.equal(suite.tests.length);
+    suite.tests[0].fn(() => {});
+    suite.tests[1].fn(() => {});
+    expect(3).is.equal(sum);
+    expect('@R01 @S01').is.equal(suite.tests[0].title);
+    expect('@R01 @S02').is.equal(suite.tests[1].title);
   });
 
   it('should load step definitions', () => {
