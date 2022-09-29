@@ -68,7 +68,7 @@ describe('BDD', () => {
     expect(ast.feature.children[0].scenario.steps).is.ok;
   });
 
-  it('should support rule keyword', () => {
+  it('should support rule keyword', (done) => {
     const text = `
     @F01
     Feature: Logs in
@@ -104,16 +104,15 @@ describe('BDD', () => {
     Given('I have a mood to test', () => sum += 100);
     Given('I am on login page', () => sum += 10);
     When('I input correct email and wrong password', () => sum += 1);
-    When('I input correct email and password', () => sum += 2);
-    When('I sign in google site', () => sum += 5);
     const suite = run(text);
+    suite.tests[0].fn(async () => {
+      expect(111).is.equal(sum);
+      done();
+    });
     expect(3).is.equal(suite.tests.length);
     expect(suite.tests[0].title).to.have.string('@F01 @R01 @S01');
     expect(suite.tests[1].title).to.have.string('@F01 @R01 @S02');
     expect(suite.tests[2].title).to.have.string('@F01 @R02 @S01');
-    Promise.all(suite.tests.map(test => test.fn(() => {}))).then(
-      () => expect(328).is.equal(sum),
-    );
   });
 
   it('should load step definitions', () => {
