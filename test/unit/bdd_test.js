@@ -72,34 +72,48 @@ describe('BDD', () => {
     const text = `
     @F01
     Feature: Logs in
+      Background:
+        Given I have a mood to test
 
       @R01
-      Rule: Email or password cannot be blank
+      Rule: Email and password should be correct
+        Background:
+          Given I am on login page
         @S01
         Scenario:
-          When I input correct email
-          And I let password be empty
-          And I clicks submit button
-          Then I get an error message
-          And I am still on the login page
+          When I input correct email and wrong password
+          And I click submit button
+          Then I am still on the login page
         @S02
         Scenario:
-          When I input correct password
-          And I let email be empty
-          And I clicks submit button
-          Then I get an error message
-          And I am still on the login page
+          When I input correct email and password
+          And I click submit button
+          Then I see welcome
+
+      @R02
+      Rule: Use google account to log in
+        @S01
+        Scenario:
+          Given I am on login page with the link "sign in with google account"
+          When I click "sign in with google account"
+          And I sign in google site
+          And I click go to my site
+          Then I see welcome
     `;
     let sum = 0;
-    When('I input correct email', () => sum += 1);
-    When('I input correct password', () => sum += 2);
+    Given('I have a mood to test', () => sum += 100);
+    Given('I am on login page', () => sum += 10);
+    When('I input correct email and wrong password', () => sum += 1);
+    When('I input correct email and password', () => sum += 2);
+    When('I sign in google site', () => sum += 5);
     const suite = run(text);
-    expect(2).is.equal(suite.tests.length);
-    suite.tests[0].fn(() => {});
-    suite.tests[1].fn(() => {});
-    expect(3).is.equal(sum);
-    expect('@R01 @S01').is.equal(suite.tests[0].title);
-    expect('@R01 @S02').is.equal(suite.tests[1].title);
+    expect(3).is.equal(suite.tests.length);
+    expect(suite.tests[0].title).to.have.string('@F01 @R01 @S01');
+    expect(suite.tests[1].title).to.have.string('@F01 @R01 @S02');
+    expect(suite.tests[2].title).to.have.string('@F01 @R02 @S01');
+    Promise.all(suite.tests.map(test => test.fn(() => {}))).then(
+      () => expect(328).is.equal(sum),
+    );
   });
 
   it('should load step definitions', () => {
@@ -304,7 +318,7 @@ describe('BDD', () => {
     expect(500.30).is.equal(fn(fn.params));
   });
 
-  it('should attach before hook for Background', () => {
+  it('should attach before hook for Background', (done) => {
     const text = `
     Feature: checkout process
 
@@ -315,13 +329,13 @@ describe('BDD', () => {
         Then I am shopping
     `;
     let sum = 0;
-    Given('I am logged in as customer', () => sum++);
-    Then('I am shopping', () => sum++);
+    Given('I am logged in as customer', () => sum += 1);
+    Then('I am shopping', () => sum += 2);
     const suite = run(text);
-    const done = () => { };
-    suite._beforeEach.forEach(hook => hook.run(done));
-    suite.tests[0].fn(done);
-    expect(2).is.equal(sum);
+    suite.tests[0].fn(() => {
+      expect(3).is.equal(sum);
+      done();
+    });
   });
 
   it('should execute scenario outlines', (done) => {
