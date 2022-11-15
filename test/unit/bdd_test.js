@@ -115,6 +115,39 @@ describe('BDD', () => {
     expect(suite.tests[2].title).to.have.string('@F01 @R02 @S01');
   });
 
+  // it('should support rule with examples', (done) => {
+  //   const text = `
+  //   @E01 @F02
+  //   Feature: Logs in 2
+  //     Background:
+  //       Given I have a mood to test
+
+  //     @R01
+  //     Rule: Wrong credentials fail
+  //       @S01
+  //       Scenario: Wrong emails fail
+  //         Given I am on login page
+  //         When I fill wrong <email> and <password>
+  //         And I click sign in
+  //         Then I see a warning message
+  //         Examples:
+  //           | email                   | password |
+  //           | chaofan.jiang@gmail.com | 123      |
+  //           | arnold.cui@gmail.com    | 123      |
+  //   `;
+  //   let sum = 0;
+  //   Given('I have a mood to test', () => sum += 100);
+  //   When('I click sign in', () => sum += 1);
+  //   const suite = run(text);
+  //   expect(2).is.equal(suite.tests.length);
+  //   expect(suite.tests[0].title).to.have.string('@E01 @F02 @R01 @S01');
+  //   expect(suite.tests[1].title).to.have.string('@E01 @F02 @R01 @S01');
+  //   suite.tests[0].fn(() => {
+  //     expect(100).is.equal(sum);
+  //     done();
+  //   });
+  // });
+
   it('should load step definitions', () => {
     Given('I am a bird', () => 1);
     When('I fly over ocean', () => 2);
