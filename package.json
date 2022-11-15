@@ -55,7 +55,7 @@
   "dependencies": {
     "@codeceptjs/configure": "^0.8.0",
     "@codeceptjs/helper": "^1.0.2",
-    "@cucumber/gherkin": "^24.0.0",
+    "@cucumber/gherkin": "^25.0.2",
     "@cucumber/messages": "^19.1.4",
     "@cucumber/cucumber-expressions": "^16.0.0",
     "acorn": "^8.8.0",
